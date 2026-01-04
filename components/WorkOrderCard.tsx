@@ -56,13 +56,22 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
 
       case OrderStatus.TO_VISIT:
         return (
-          <button 
-            onClick={() => onAction('confirm_arrival', order)}
-            className="w-full mt-4 bg-white border-2 border-primary-600 text-primary-700 font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary-50 active:scale-[0.98] transition-all"
-          >
-            <MapPin size={18} />
-            <span>Confirm Arrival</span>
-          </button>
+          <div className="mt-4 flex gap-3">
+             <button 
+                onClick={() => onAction('parts', order)}
+                className="shrink-0 w-20 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl flex flex-col items-center justify-center py-2 gap-1 active:scale-95 transition-transform border border-orange-100"
+             >
+                <Package size={20} />
+                <span className="text-[10px] font-bold">Parts</span>
+            </button>
+            <button 
+              onClick={() => onAction('confirm_arrival', order)}
+              className="flex-1 bg-white border-2 border-primary-600 text-primary-700 font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary-50 active:scale-[0.98] transition-all"
+            >
+              <MapPin size={18} />
+              <span>Confirm Arrival</span>
+            </button>
+          </div>
         );
 
       case OrderStatus.IN_PROGRESS:
@@ -84,7 +93,6 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
               <CheckCircle size={20} />
               <span className="text-[10px] font-bold">Done</span>
             </button>
-            {/* Second row for extra actions if needed, or keep it compact. Let's add Reassign as a text link or small icon in header. */}
           </div>
         );
 
@@ -156,10 +164,13 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
                 </p>
              </div>
              
-             <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm">
-                <MapPin size={16} />
-                <span className="truncate max-w-[180px]">{order.address}</span>
-             </div>
+             <button 
+                onClick={() => onAction('navigate', order)}
+                className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm hover:text-primary-600 transition-colors text-left"
+             >
+                <MapPin size={16} className="shrink-0" />
+                <span className="truncate max-w-[180px] underline decoration-slate-300 underline-offset-2">{order.address}</span>
+             </button>
 
              <div className="flex items-center gap-4 text-slate-500 dark:text-slate-400 text-xs font-semibold mt-1">
                 <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md">
@@ -176,15 +187,20 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
           </div>
 
           {/* Map Thumbnail / Navigation Button */}
-          {(order.status === OrderStatus.PENDING || order.status === OrderStatus.TO_VISIT) && (
+          {order.status !== OrderStatus.COMPLETED && (
             <div className="shrink-0">
-               <button className="w-20 h-20 rounded-xl bg-slate-200 dark:bg-slate-700 relative overflow-hidden group hover:ring-2 ring-primary-500 transition-all">
+               <button 
+                 onClick={(e) => {
+                     e.stopPropagation();
+                     onAction('navigate', order);
+                 }}
+                 className="w-20 h-20 rounded-xl bg-slate-200 dark:bg-slate-700 relative overflow-hidden group hover:ring-2 ring-primary-500 transition-all cursor-pointer"
+               >
                   <img 
                     src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${order.lng},${order.lat},14,0/200x200?access_token=YOUR_TOKEN`} 
                     alt="Map"
                     className="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all"
                     onError={(e) => {
-                        // Fallback if mapbox token isn't real
                         (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/map/200/200?grayscale';
                     }}
                   />

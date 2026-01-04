@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, Paperclip, Minimize2 } from 'lucide-react';
-import { WorkOrder, ChatMessage, OrderStatus } from '../types';
+import { WorkOrder, ChatMessage } from '../types';
 import { MOCK_ORDERS } from '../constants';
 
 interface ChatWidgetProps {
@@ -71,13 +71,13 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ isOpen, onClose, activeOrders }
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center pointer-events-none">
+    <div className="absolute inset-0 z-50 flex items-end sm:items-center justify-center pointer-events-none">
       <div className="bg-black/20 absolute inset-0 backdrop-blur-sm pointer-events-auto" onClick={onClose} />
       
-      <div className="bg-white dark:bg-slate-900 w-full sm:w-[400px] h-[80vh] sm:h-[600px] sm:rounded-2xl shadow-2xl flex flex-col pointer-events-auto animate-in slide-in-from-bottom duration-300">
+      <div className="bg-white dark:bg-slate-900 w-full sm:w-[95%] h-[80%] sm:h-[600px] sm:rounded-2xl shadow-2xl flex flex-col pointer-events-auto animate-in slide-in-from-bottom duration-300">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b dark:border-slate-800 bg-white dark:bg-slate-900 sm:rounded-t-2xl">
+        <div className="flex items-center justify-between p-4 border-b dark:border-slate-800 bg-white dark:bg-slate-900 rounded-t-2xl">
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold">CS</div>

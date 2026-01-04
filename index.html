@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>FieldPro Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -49,6 +49,7 @@
       }
       body {
         -webkit-tap-highlight-color: transparent;
+        overscroll-behavior-y: none; /* Prevent pull-to-refresh on mobile web */
       }
     </style>
   <script type="importmap">
@@ -62,7 +63,8 @@
 }
 </script>
 </head>
-  <body class="bg-gray-50 text-slate-900 select-none">
-    <div id="root"></div>
+  <body class="bg-gray-200 text-slate-900 select-none h-[100dvh] w-full flex justify-center items-center overflow-hidden">
+    <!-- Root limits width to emulate mobile app on desktop -->
+    <div id="root" class="w-full h-full max-w-[480px] bg-white dark:bg-slate-900 shadow-2xl relative overflow-hidden"></div>
   </body>
 </html>

@@ -21,6 +21,13 @@ export enum OrderStatus {
     type: string; // e.g., HVAC, Plumbing, Network
     afterSalesStatus?: string; // e.g., "Pending Review", "Parts Ordered"
   }
+
+  export type CertificationLevel = 'C' | 'B' | 'A' | 'S';
+
+  export interface Certification {
+    name: string;
+    level: CertificationLevel;
+  }
   
   export interface EngineerProfile {
     name: string;
@@ -32,6 +39,17 @@ export enum OrderStatus {
     creditScore: number;
     satisfactionCount: number;
     complaintCount: number;
+    certifications: Certification[];
+  }
+
+  export interface Part {
+    id: string;
+    name: string;
+    type: string; // Matches WorkOrder.type
+    partPrice: number;
+    installationPrice: number;
+    shippingFee: number;
+    imageUrl?: string;
   }
   
   export interface ChatMessage {
@@ -41,4 +59,3 @@ export enum OrderStatus {
     timestamp: Date;
     attachedOrderId?: string;
   }
-  

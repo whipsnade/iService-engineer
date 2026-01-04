@@ -8,14 +8,15 @@ import {
   Clock,
   MapPin,
   PauseCircle,
-  AlertTriangle
+  AlertTriangle,
+  Scan
 } from 'lucide-react';
 import { OrderStatus, WorkOrder, EngineerProfile } from './types';
 import { MOCK_ORDERS, MOCK_PROFILE } from './constants';
 import Sidebar from './components/Sidebar';
 import WorkOrderCard from './components/WorkOrderCard';
 import ChatWidget from './components/ChatWidget';
-import { CompleteJobModal, RepairGuideModal } from './components/Modals';
+import { CompleteJobModal, RepairGuideModal, NavigationModal, PartsSelectionModal } from './components/Modals';
 
 const App: React.FC = () => {
   // State
@@ -24,6 +25,8 @@ const App: React.FC = () => {
   const [isChatOpen, setChatOpen] = useState(false);
   const [isCompleteModalOpen, setCompleteModalOpen] = useState(false);
   const [isGuideModalOpen, setGuideModalOpen] = useState(false);
+  const [isNavModalOpen, setNavModalOpen] = useState(false);
+  const [isPartsModalOpen, setPartsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<WorkOrder | null>(null);
   const [profile, setProfile] = useState<EngineerProfile>(MOCK_PROFILE);
 
@@ -46,16 +49,20 @@ const App: React.FC = () => {
       case 'guide':
         setGuideModalOpen(true);
         break;
+      case 'navigate':
+        setNavModalOpen(true);
+        break;
+      case 'parts':
+        setPartsModalOpen(true);
+        break;
       case 'support':
         setChatOpen(true);
-        // You could pre-fill chat here
         break;
       case 'accept':
       case 'confirm_arrival':
       case 'pause':
       case 'resume':
         console.log(`Action ${action} on order ${order.id}`);
-        // In a real app, update state via API here
         break;
       default:
         break;
@@ -72,12 +79,12 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-24 font-sans">
+    <div className="h-full w-full bg-slate-50 dark:bg-slate-900 flex flex-col font-sans relative">
       
-      {/* Top App Bar */}
-      <header className="sticky top-0 z-30 bg-white dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
-        <div className="flex items-center justify-between px-4 py-3">
-          
+      {/* Fixed Top Section (Header + Tabs) */}
+      <div className="flex-none bg-white dark:bg-slate-900 z-30 shadow-sm border-b border-slate-200 dark:border-slate-800">
+        {/* App Bar */}
+        <header className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(true)} className="relative group">
                <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-100 dark:border-slate-700 group-hover:border-primary-500 transition-colors">
@@ -103,14 +110,13 @@ const App: React.FC = () => {
               <Bell size={20} />
             </button>
           </div>
-        </div>
+        </header>
 
         {/* Tab Navigation */}
         <div className="w-full overflow-x-auto no-scrollbar px-4 pt-2">
-          <div className="flex gap-4 min-w-max border-b border-slate-200 dark:border-slate-800">
+          <div className="flex gap-4 min-w-max">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
-              // Simple badge logic for demo
               const count = MOCK_ORDERS.filter(o => o.status === tab.id).length;
               
               return (
@@ -133,12 +139,12 @@ const App: React.FC = () => {
             })}
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="p-4 flex flex-col gap-4 animate-in fade-in duration-500">
+      {/* Main Content (Scrollable) */}
+      <main className="flex-1 overflow-y-auto no-scrollbar p-4 flex flex-col gap-4 animate-in fade-in duration-500 pb-24">
          {/* List Header */}
-         <div className="flex items-center justify-between">
+         <div className="flex items-center justify-between shrink-0">
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
                 {activeTab.replace('_', ' ')}
             </h2>
@@ -166,7 +172,7 @@ const App: React.FC = () => {
          )}
       </main>
 
-      {/* Overlays */}
+      {/* Overlays (Absolute to contain within mobile view) */}
       <Sidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setSidebarOpen(false)} 
@@ -180,7 +186,6 @@ const App: React.FC = () => {
         activeOrders={activeOrdersForChat}
       />
 
-      {/* Action Modals */}
       <CompleteJobModal 
         isOpen={isCompleteModalOpen} 
         onClose={() => setCompleteModalOpen(false)} 
@@ -192,10 +197,22 @@ const App: React.FC = () => {
         onClose={() => setGuideModalOpen(false)} 
         order={selectedOrder} 
       />
+      
+      <NavigationModal
+        isOpen={isNavModalOpen}
+        onClose={() => setNavModalOpen(false)}
+        order={selectedOrder}
+      />
+      
+      <PartsSelectionModal
+        isOpen={isPartsModalOpen}
+        onClose={() => setPartsModalOpen(false)}
+        order={selectedOrder}
+      />
 
-      {/* Mobile Floating Action Button (Optional Scanner) */}
-      <button className="fixed bottom-6 right-6 w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg shadow-primary-900/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-20">
-        <span className="material-symbols-outlined text-2xl font-bold">+</span>
+      {/* Mobile Floating Action Button */}
+      <button className="absolute bottom-6 right-6 w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg shadow-primary-900/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-20">
+        <Scan size={24} />
       </button>
 
     </div>

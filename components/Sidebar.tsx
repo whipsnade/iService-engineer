@@ -1,18 +1,21 @@
 import React from 'react';
-import { EngineerProfile } from '../types';
+import { EngineerProfile, CertificationLevel } from '../types';
 import { 
   X, 
   Wifi, 
   RotateCw, 
   ClipboardCheck, 
   Wallet, 
-  Award, 
   Star, 
-  AlertCircle,
   Settings,
   HelpCircle,
   LogOut,
-  Building2
+  Building2,
+  Plus,
+  Medal,
+  Crown,
+  Shield,
+  Zap
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -23,16 +26,109 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, profile, toggleOnline }) => {
+  
+  const getBrandInitials = (name: string) => {
+      if (name === 'Burger King') return 'BK';
+      if (name === 'Starbucks') return 'SB';
+      return name.substring(0, 3).toUpperCase();
+  };
+
+  const BadgeItem = ({ name, level }: { name: string, level: CertificationLevel }) => {
+    // Styling Logic based on Level
+    const getStyles = () => {
+      switch (level) {
+        case 'S':
+          return {
+            container: "bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 border border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.5)]",
+            text: "text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500",
+            iconColor: "text-yellow-400",
+            levelBadge: "bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg",
+            pattern: (
+              <div className="absolute inset-0 opacity-30">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent animate-pulse"></div>
+                <div className="w-full h-full" style={{ backgroundImage: 'radial-gradient(white 1px, transparent 1px)', backgroundSize: '8px 8px' }}></div>
+              </div>
+            )
+          };
+        case 'A':
+          return {
+            container: "bg-gradient-to-br from-yellow-900 via-yellow-800 to-amber-900 border border-yellow-500/50 shadow-[0_0_10px_rgba(234,179,8,0.3)]",
+            text: "text-yellow-100",
+            iconColor: "text-yellow-200",
+            levelBadge: "bg-yellow-500 text-yellow-950",
+            pattern: (
+              <div className="absolute inset-0 opacity-20">
+                 <div className="w-full h-full" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #fbbf24 0, #fbbf24 1px, transparent 0, transparent 50%)', backgroundSize: '10px 10px' }}></div>
+              </div>
+            )
+          };
+        case 'B':
+          return {
+            container: "bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-500",
+            text: "text-slate-200",
+            iconColor: "text-slate-300",
+            levelBadge: "bg-slate-500 text-white",
+            pattern: (
+              <div className="absolute inset-0 opacity-10">
+                 <div className="w-full h-full" style={{ backgroundImage: 'linear-gradient(to right, #94a3b8 1px, transparent 1px), linear-gradient(to bottom, #94a3b8 1px, transparent 1px)', backgroundSize: '14px 14px' }}></div>
+              </div>
+            )
+          };
+        default: // C
+          return {
+            container: "bg-slate-800 border border-slate-700",
+            text: "text-slate-400",
+            iconColor: "text-slate-600",
+            levelBadge: "bg-slate-700 text-slate-300",
+            pattern: null
+          };
+      }
+    };
+
+    const styles = getStyles();
+
+    return (
+        <div className="flex flex-col items-center gap-2 w-[72px] group relative">
+            {/* Main Badge Box */}
+            <div className={`w-16 h-16 rounded-xl relative flex flex-col items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-1 ${styles.container}`}>
+                
+                {/* Background Pattern */}
+                {styles.pattern}
+
+                {/* Level Icon / Decor */}
+                {level === 'S' && <Crown size={12} className={`absolute top-1 right-1 ${styles.iconColor}`} />}
+                {level === 'A' && <Star size={12} className={`absolute top-1 right-1 ${styles.iconColor}`} />}
+                {level === 'B' && <Shield size={12} className={`absolute top-1 right-1 ${styles.iconColor}`} />}
+
+                {/* Brand Initials */}
+                <span className={`font-black text-lg z-10 tracking-wider ${styles.text}`}>
+                    {getBrandInitials(name)}
+                </span>
+
+                {/* Level Tag (Bottom Center) */}
+                <div className={`absolute bottom-0 inset-x-0 h-4 flex items-center justify-center text-[9px] font-bold uppercase tracking-widest z-10 ${styles.levelBadge}`}>
+                    LV.{level}
+                </div>
+            </div>
+            
+            {/* Label below */}
+            <span className="text-[10px] font-medium text-slate-400 text-center leading-tight truncate w-full group-hover:text-white transition-colors">
+                {name}
+            </span>
+        </div>
+    );
+  };
+
   return (
     <>
       {/* Backdrop */}
       <div 
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`absolute inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
       
       {/* Sidebar Content */}
-      <div className={`fixed inset-y-0 left-0 w-[85%] max-w-sm bg-slate-900 z-50 transform transition-transform duration-300 ease-out shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`absolute inset-y-0 left-0 w-[85%] max-w-sm bg-slate-900 z-50 transform transition-transform duration-300 ease-out shadow-2xl ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col h-full overflow-y-auto no-scrollbar p-6">
           
           {/* Header */}
@@ -123,10 +219,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, profile, toggleOnlin
             </div>
           </div>
 
-          <button className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 mb-8 transition-colors shadow-lg shadow-primary-900/20">
-            <Award size={20} />
-            Skill Certification
-          </button>
+          {/* Skill Honor Wall */}
+          <div className="mb-8">
+             <div className="flex items-center justify-between mb-3 ml-1">
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">Skill Honor Wall</p>
+                <Medal size={14} className="text-yellow-500" />
+             </div>
+             
+             <div className="flex flex-wrap gap-3">
+                {profile.certifications?.map((cert, index) => (
+                    <BadgeItem key={index} name={cert.name} level={cert.level} />
+                ))}
+                
+                {/* Add New Badge */}
+                <button className="flex flex-col items-center gap-2 w-[72px] group">
+                    <div className="w-16 h-16 rounded-xl border-2 border-dashed border-slate-700 hover:border-primary-500 hover:bg-slate-800 flex items-center justify-center text-slate-500 group-hover:text-primary-500 transition-all">
+                        <Plus size={24} />
+                    </div>
+                    <span className="text-[10px] font-medium text-slate-500 group-hover:text-primary-500 transition-colors">Apply New</span>
+                </button>
+             </div>
+          </div>
 
           {/* Footer Links */}
           <div className="mt-auto border-t border-slate-800 pt-6 space-y-1">

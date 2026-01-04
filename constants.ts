@@ -1,4 +1,4 @@
-import { OrderStatus, WorkOrder, EngineerProfile } from './types';
+import { OrderStatus, WorkOrder, EngineerProfile, Part } from './types';
 
 export const MOCK_PROFILE: EngineerProfile = {
   name: "Alex Engineer",
@@ -9,7 +9,13 @@ export const MOCK_PROFILE: EngineerProfile = {
   balance: 145.50,
   creditScore: 98,
   satisfactionCount: 420,
-  complaintCount: 0
+  complaintCount: 0,
+  certifications: [
+    { name: "YUM", level: "S" },
+    { name: "Starbucks", level: "A" },
+    { name: "Burger King", level: "B" },
+    { name: "Tesla Charging", level: "C" }
+  ]
 };
 
 export const MOCK_ORDERS: WorkOrder[] = [
@@ -99,4 +105,28 @@ export const MOCK_ORDERS: WorkOrder[] = [
     lng: -122.4194,
     type: "Door Systems"
   }
+];
+
+export const MOCK_PARTS: Part[] = [
+    // Elevator
+    { id: 'p-el-1', name: 'Main Control Board V2', type: 'Elevator', partPrice: 450.00, installationPrice: 150.00, shippingFee: 25.00 },
+    { id: 'p-el-2', name: 'Door Sensor Kit', type: 'Elevator', partPrice: 120.00, installationPrice: 80.00, shippingFee: 15.00 },
+    { id: 'p-el-3', name: 'Hydraulic Pump Seal', type: 'Elevator', partPrice: 35.00, installationPrice: 200.00, shippingFee: 10.00 },
+    // Refrigeration
+    { id: 'p-ref-1', name: 'Compressor Unit 5HP', type: 'Refrigeration', partPrice: 800.00, installationPrice: 300.00, shippingFee: 100.00 },
+    { id: 'p-ref-2', name: 'Thermostat Digital', type: 'Refrigeration', partPrice: 60.00, installationPrice: 40.00, shippingFee: 10.00 },
+    // IT/Network
+    { id: 'p-it-1', name: 'Cat6 Ethernet Spool', type: 'IT/Network', partPrice: 120.00, installationPrice: 100.00, shippingFee: 20.00 },
+    { id: 'p-it-2', name: 'Network Switch 24-Port', type: 'IT/Network', partPrice: 250.00, installationPrice: 50.00, shippingFee: 15.00 },
+    // HVAC
+    { id: 'p-hvac-1', name: 'Blower Motor', type: 'HVAC', partPrice: 180.00, installationPrice: 120.00, shippingFee: 30.00 },
+    { id: 'p-hvac-2', name: 'Capacitor 45/5', type: 'HVAC', partPrice: 25.00, installationPrice: 60.00, shippingFee: 8.00 },
+    // Kitchen Equip
+    { id: 'p-kit-1', name: 'Heating Element', type: 'Kitchen Equip', partPrice: 85.00, installationPrice: 75.00, shippingFee: 12.00 },
+    { id: 'p-kit-2', name: 'Fryer Basket', type: 'Kitchen Equip', partPrice: 45.00, installationPrice: 0.00, shippingFee: 15.00 },
+    // Coffee Machine
+    { id: 'p-cof-1', name: 'Group Head Gasket', type: 'Coffee Machine', partPrice: 8.00, installationPrice: 40.00, shippingFee: 5.00 },
+    { id: 'p-cof-2', name: 'Water Pump Assembly', type: 'Coffee Machine', partPrice: 140.00, installationPrice: 90.00, shippingFee: 15.00 },
+    // Door Systems
+    { id: 'p-door-1', name: 'Motion Sensor Radar', type: 'Door Systems', partPrice: 210.00, installationPrice: 80.00, shippingFee: 10.00 },
 ];
