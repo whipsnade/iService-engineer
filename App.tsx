@@ -16,6 +16,7 @@ import { MOCK_ORDERS, MOCK_PROFILE } from './constants';
 import Sidebar from './components/Sidebar';
 import WorkOrderCard from './components/WorkOrderCard';
 import ChatWidget from './components/ChatWidget';
+import WorkOrderDetail from './components/WorkOrderDetail';
 import { CompleteJobModal, RepairGuideModal, NavigationModal, PartsSelectionModal } from './components/Modals';
 
 const App: React.FC = () => {
@@ -28,6 +29,7 @@ const App: React.FC = () => {
   const [isNavModalOpen, setNavModalOpen] = useState(false);
   const [isPartsModalOpen, setPartsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<WorkOrder | null>(null);
+  const [viewingOrder, setViewingOrder] = useState<WorkOrder | null>(null);
   const [profile, setProfile] = useState<EngineerProfile>(MOCK_PROFILE);
 
   // Derived State
@@ -43,6 +45,9 @@ const App: React.FC = () => {
   const handleAction = (action: string, order: WorkOrder) => {
     setSelectedOrder(order);
     switch (action) {
+      case 'view':
+        setViewingOrder(order);
+        break;
       case 'complete':
         setCompleteModalOpen(true);
         break;
@@ -173,6 +178,16 @@ const App: React.FC = () => {
       </main>
 
       {/* Overlays (Absolute to contain within mobile view) */}
+      
+      {/* Detail View Overlay */}
+      {viewingOrder && (
+          <WorkOrderDetail 
+            order={viewingOrder} 
+            onBack={() => setViewingOrder(null)} 
+            onAction={handleAction} 
+          />
+      )}
+
       <Sidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setSidebarOpen(false)} 
@@ -210,10 +225,12 @@ const App: React.FC = () => {
         order={selectedOrder}
       />
 
-      {/* Mobile Floating Action Button */}
-      <button className="absolute bottom-6 right-6 w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg shadow-primary-900/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-20">
-        <Scan size={24} />
-      </button>
+      {/* Mobile Floating Action Button (Hide when viewing details) */}
+      {!viewingOrder && (
+          <button className="absolute bottom-6 right-6 w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg shadow-primary-900/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-20">
+            <Scan size={24} />
+          </button>
+      )}
 
     </div>
   );

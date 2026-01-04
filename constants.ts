@@ -22,6 +22,7 @@ export const MOCK_ORDERS: WorkOrder[] = [
   {
     id: "WO-29384",
     storeName: "Tech Park Bldg A",
+    storePhone: "+1 (555) 010-1024",
     address: "1024 Innovation Dr, Floor 1",
     distance: "0.8 mi",
     faultDescription: "Elevator Door Jam - Main Lobby. Unit is unresponsive to reset.",
@@ -30,11 +31,26 @@ export const MOCK_ORDERS: WorkOrder[] = [
     startTime: "45m ago",
     lat: 37.7749,
     lng: -122.4194,
-    type: "Elevator"
+    type: "Elevator",
+    attachments: [
+        {
+            id: 'att-1',
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2069&auto=format&fit=crop',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=200&auto=format&fit=crop'
+        },
+        {
+            id: 'att-2',
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=200&auto=format&fit=crop'
+        }
+    ]
   },
   {
     id: "WO-8852",
     storeName: "Northside Grocery #118",
+    storePhone: "+1 (555) 012-3456",
     address: "8842 Market St, Downtown",
     distance: "2.4 mi",
     faultDescription: "Cooling leak reported near dairy section. Temperature rising.",
@@ -42,11 +58,20 @@ export const MOCK_ORDERS: WorkOrder[] = [
     priority: "Medium",
     lat: 37.7849,
     lng: -122.4094,
-    type: "Refrigeration"
+    type: "Refrigeration",
+    attachments: [
+        {
+            id: 'att-3',
+            type: 'video',
+            url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', // Sample video
+            thumbnailUrl: 'https://images.unsplash.com/photo-1584622412117-b1cc5440e2b3?q=80&w=200&auto=format&fit=crop'
+        }
+    ]
   },
   {
     id: "WO-1029",
     storeName: "City Center Mall",
+    storePhone: "+1 (555) 098-7654",
     address: "500 Main St, 3rd Floor",
     distance: "5.1 mi",
     faultDescription: "POS Terminal #4 network connectivity intermittent.",
@@ -59,6 +84,7 @@ export const MOCK_ORDERS: WorkOrder[] = [
   {
     id: "WO-9921",
     storeName: "Westside Clinic",
+    storePhone: "+1 (555) 111-2222",
     address: "1200 Health Blvd",
     distance: "12.0 mi",
     faultDescription: "HVAC Unit 4B making loud grinding noises.",
@@ -71,6 +97,7 @@ export const MOCK_ORDERS: WorkOrder[] = [
   {
     id: "WO-4432",
     storeName: "Burger Joint #55",
+    storePhone: "+1 (555) 333-4444",
     address: "99 Fast Food Ln",
     distance: "1.2 mi",
     faultDescription: "Fryer thermostat calibration required.",
@@ -83,6 +110,7 @@ export const MOCK_ORDERS: WorkOrder[] = [
   {
     id: "WO-3321",
     storeName: "Coffee House Deluxe",
+    storePhone: "+1 (555) 555-6666",
     address: "42 Bean St",
     distance: "0.5 mi",
     faultDescription: "Espresso machine group head leaking.",
@@ -96,6 +124,7 @@ export const MOCK_ORDERS: WorkOrder[] = [
   {
     id: "WO-1111",
     storeName: "Retail Store X",
+    storePhone: "+1 (555) 777-8888",
     address: "101 Shopper Ave",
     distance: "3.0 mi",
     faultDescription: "Automatic door sensor malfunction.",

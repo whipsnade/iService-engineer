@@ -23,6 +23,16 @@ interface WorkOrderCardProps {
 
 const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
   
+  const handleActionClick = (e: React.MouseEvent, action: string) => {
+    e.stopPropagation();
+    onAction(action, order);
+  };
+
+  const handleCallStore = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      window.location.href = `tel:${order.storePhone}`;
+  };
+
   const getPriorityColor = (p: string) => {
     switch (p) {
       case 'Critical': return 'bg-red-100 text-red-700 border-red-200';
@@ -46,7 +56,7 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
       case OrderStatus.PENDING:
         return (
           <button 
-            onClick={() => onAction('accept', order)}
+            onClick={(e) => handleActionClick(e, 'accept')}
             className="w-full mt-4 bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary-900/20 active:scale-[0.98] transition-all"
           >
             <span>Accept Job</span>
@@ -58,14 +68,14 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
         return (
           <div className="mt-4 flex gap-3">
              <button 
-                onClick={() => onAction('parts', order)}
+                onClick={(e) => handleActionClick(e, 'parts')}
                 className="shrink-0 w-20 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl flex flex-col items-center justify-center py-2 gap-1 active:scale-95 transition-transform border border-orange-100"
              >
                 <Package size={20} />
                 <span className="text-[10px] font-bold">Parts</span>
             </button>
             <button 
-              onClick={() => onAction('confirm_arrival', order)}
+              onClick={(e) => handleActionClick(e, 'confirm_arrival')}
               className="flex-1 bg-white border-2 border-primary-600 text-primary-700 font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary-50 active:scale-[0.98] transition-all"
             >
               <MapPin size={18} />
@@ -77,19 +87,19 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
       case OrderStatus.IN_PROGRESS:
         return (
           <div className="mt-4 grid grid-cols-4 gap-2">
-            <button onClick={() => onAction('pause', order)} className="col-span-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl flex flex-col items-center justify-center py-2 gap-1 active:scale-95 transition-transform">
+            <button onClick={(e) => handleActionClick(e, 'pause')} className="col-span-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl flex flex-col items-center justify-center py-2 gap-1 active:scale-95 transition-transform">
               <PauseCircle size={20} />
               <span className="text-[10px] font-bold">Pause</span>
             </button>
-            <button onClick={() => onAction('guide', order)} className="col-span-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl flex flex-col items-center justify-center py-2 gap-1 active:scale-95 transition-transform">
+            <button onClick={(e) => handleActionClick(e, 'guide')} className="col-span-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl flex flex-col items-center justify-center py-2 gap-1 active:scale-95 transition-transform">
               <BookOpen size={20} />
               <span className="text-[10px] font-bold">Guide</span>
             </button>
-             <button onClick={() => onAction('parts', order)} className="col-span-1 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl flex flex-col items-center justify-center py-2 gap-1 active:scale-95 transition-transform">
+             <button onClick={(e) => handleActionClick(e, 'parts')} className="col-span-1 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl flex flex-col items-center justify-center py-2 gap-1 active:scale-95 transition-transform">
               <Package size={20} />
               <span className="text-[10px] font-bold">Parts</span>
             </button>
-            <button onClick={() => onAction('complete', order)} className="col-span-1 bg-green-600 hover:bg-green-700 text-white rounded-xl flex flex-col items-center justify-center py-2 gap-1 shadow-md active:scale-95 transition-transform">
+            <button onClick={(e) => handleActionClick(e, 'complete')} className="col-span-1 bg-green-600 hover:bg-green-700 text-white rounded-xl flex flex-col items-center justify-center py-2 gap-1 shadow-md active:scale-95 transition-transform">
               <CheckCircle size={20} />
               <span className="text-[10px] font-bold">Done</span>
             </button>
@@ -99,7 +109,7 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
       case OrderStatus.ON_HOLD:
         return (
           <button 
-            onClick={() => onAction('resume', order)}
+            onClick={(e) => handleActionClick(e, 'resume')}
             className="w-full mt-4 bg-slate-800 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-700 active:scale-[0.98] transition-all"
           >
             <PlayCircle size={18} />
@@ -115,7 +125,7 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
                  <span className="text-sm font-semibold text-primary-700">{order.afterSalesStatus || 'Processing'}</span>
               </div>
               <button 
-                onClick={() => onAction('support', order)}
+                onClick={(e) => handleActionClick(e, 'support')}
                 className="w-full bg-white border border-slate-300 text-slate-700 font-bold py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-slate-50 text-sm"
               >
                 <Phone size={16} />
@@ -130,24 +140,37 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
   };
 
   return (
-    <article className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 relative overflow-hidden transition-all hover:shadow-md">
+    <article 
+        onClick={() => onAction('view', order)}
+        className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 relative overflow-hidden transition-all hover:shadow-md cursor-pointer active:bg-slate-50"
+    >
        
-       {/* Reassign Button (Only for In Progress) */}
-       {order.status === OrderStatus.IN_PROGRESS && (
-         <button 
-            onClick={() => onAction('reassign', order)}
-            className="absolute top-4 right-4 text-slate-400 hover:text-primary-600 transition-colors"
-            title="Reassign"
-         >
-            <UserPlus size={20} />
-         </button>
-       )}
+       {/* Top Right Actions (Call & Reassign) */}
+       <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+           <button 
+                onClick={handleCallStore}
+                className="p-2 bg-slate-100 hover:bg-green-50 text-slate-500 hover:text-green-600 rounded-full transition-colors border border-transparent hover:border-green-200"
+                title="Call Store Manager"
+           >
+               <Phone size={18} />
+           </button>
+           
+           {order.status === OrderStatus.IN_PROGRESS && (
+             <button 
+                onClick={(e) => handleActionClick(e, 'reassign')}
+                className="p-2 text-slate-400 hover:text-primary-600 transition-colors"
+                title="Reassign"
+             >
+                <UserPlus size={20} />
+             </button>
+           )}
+       </div>
 
        {/* Header */}
-       <div className="flex justify-between items-start pr-8">
+       <div className="flex justify-between items-start pr-16">
          <div>
             <div className="flex items-center gap-2 mb-1">
-                <h3 className="font-bold text-lg text-slate-900 dark:text-white leading-tight">{order.storeName}</h3>
+                <h3 className="font-bold text-lg text-slate-900 dark:text-white leading-tight truncate max-w-[200px]">{order.storeName}</h3>
                 {renderStatusBadge()}
             </div>
             <p className="text-xs text-slate-500 font-medium">#{order.id} • {order.type}</p>
@@ -165,11 +188,11 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
              </div>
              
              <button 
-                onClick={() => onAction('navigate', order)}
-                className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm hover:text-primary-600 transition-colors text-left"
+                onClick={(e) => handleActionClick(e, 'navigate')}
+                className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm hover:text-primary-600 transition-colors text-left group w-full"
              >
-                <MapPin size={16} className="shrink-0" />
-                <span className="truncate max-w-[180px] underline decoration-slate-300 underline-offset-2">{order.address}</span>
+                <MapPin size={16} className="shrink-0 text-primary-600 group-hover:scale-110 transition-transform" />
+                <span className="truncate underline decoration-slate-300 underline-offset-2 group-hover:decoration-primary-600">{order.address}</span>
              </button>
 
              <div className="flex items-center gap-4 text-slate-500 dark:text-slate-400 text-xs font-semibold mt-1">
@@ -185,33 +208,6 @@ const WorkOrderCard: React.FC<WorkOrderCardProps> = ({ order, onAction }) => {
                 )}
              </div>
           </div>
-
-          {/* Map Thumbnail / Navigation Button */}
-          {order.status !== OrderStatus.COMPLETED && (
-            <div className="shrink-0">
-               <button 
-                 onClick={(e) => {
-                     e.stopPropagation();
-                     onAction('navigate', order);
-                 }}
-                 className="w-20 h-20 rounded-xl bg-slate-200 dark:bg-slate-700 relative overflow-hidden group hover:ring-2 ring-primary-500 transition-all cursor-pointer"
-               >
-                  <img 
-                    src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${order.lng},${order.lat},14,0/200x200?access_token=YOUR_TOKEN`} 
-                    alt="Map"
-                    className="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/map/200/200?grayscale';
-                    }}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent">
-                     <div className="bg-white p-2 rounded-full shadow-lg text-primary-600">
-                        <Navigation size={20} className="ml-0.5" />
-                     </div>
-                  </div>
-               </button>
-            </div>
-          )}
        </div>
 
        {renderActions()}

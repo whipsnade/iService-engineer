@@ -39,7 +39,7 @@ export const CompleteJobModal: React.FC<{ isOpen: boolean; onClose: () => void; 
         "Part Replaced",
         "Firmware Update",
         "Hardware Reset",
-        "Cleaning/Maint.",
+        "Cleaning/Maintenance",
         "Configuration",
         "Other"
     ];
@@ -72,24 +72,36 @@ export const CompleteJobModal: React.FC<{ isOpen: boolean; onClose: () => void; 
                     </div>
                 </div>
 
-                {/* Solution Selector */}
+                {/* Solution Radio Group */}
                 <div>
-                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
-                        Select Solution <span className="text-red-500">*</span>
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">
+                        Resolution Type <span className="text-red-500">*</span>
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
-                        {solutionOptions.map(opt => (
-                            <button
-                                key={opt}
-                                onClick={() => setSolution(opt)}
-                                className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all duration-200 ${
-                                    solution === opt
-                                        ? 'bg-primary-600 text-white border-primary-600 shadow-md transform scale-[1.02]'
-                                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
-                                }`}
+                    <div className="grid grid-cols-2 gap-3">
+                        {solutionOptions.map((opt) => (
+                            <label 
+                                key={opt} 
+                                className={`
+                                    relative flex items-center p-3 rounded-xl border cursor-pointer transition-all duration-200
+                                    ${solution === opt 
+                                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 shadow-sm ring-1 ring-primary-500' 
+                                        : 'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                    }
+                                `}
                             >
-                                {opt}
-                            </button>
+                                <input 
+                                    type="radio" 
+                                    name="solution" 
+                                    value={opt} 
+                                    checked={solution === opt}
+                                    onChange={(e) => setSolution(e.target.value)}
+                                    className="sr-only" // Hide default radio button
+                                />
+                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center mr-2 transition-colors ${solution === opt ? 'border-primary-600 bg-primary-600' : 'border-slate-300'}`}>
+                                    {solution === opt && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                                </div>
+                                <span className="text-xs font-bold">{opt}</span>
+                            </label>
                         ))}
                     </div>
                 </div>
@@ -450,4 +462,4 @@ export const PartsSelectionModal: React.FC<{ isOpen: boolean; onClose: () => voi
              </div>
         </ModalBase>
     );
-};
+}

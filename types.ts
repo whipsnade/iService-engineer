@@ -6,10 +6,18 @@ export enum OrderStatus {
     AFTER_SALES = 'AFTER_SALES', // 售后中
     COMPLETED = 'COMPLETED'    // 已完成
   }
+
+  export interface Attachment {
+    id: string;
+    type: 'image' | 'video';
+    url: string;
+    thumbnailUrl?: string;
+  }
   
   export interface WorkOrder {
     id: string;
     storeName: string;
+    storePhone: string; // Added phone number
     address: string;
     distance: string;
     faultDescription: string;
@@ -20,6 +28,7 @@ export enum OrderStatus {
     lng: number;
     type: string; // e.g., HVAC, Plumbing, Network
     afterSalesStatus?: string; // e.g., "Pending Review", "Parts Ordered"
+    attachments?: Attachment[];
   }
 
   export type CertificationLevel = 'C' | 'B' | 'A' | 'S';
